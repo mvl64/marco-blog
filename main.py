@@ -1,22 +1,22 @@
 import os
+from datetime import date
+from functools import wraps
 
+from dotenv import load_dotenv  # pip install python-dotenv
 from flask import Flask, render_template, redirect, url_for, flash
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
-from datetime import date
-from dotenv import load_dotenv  # pip install python-dotenv
-
-from sqlalchemy import ForeignKey
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import relationship
-from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
-from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
 from flask_gravatar import Gravatar
-from functools import wraps
+from flask_login import UserMixin, login_user, LoginManager, current_user, logout_user
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship
+from werkzeug.security import generate_password_hash, check_password_hash
+
+from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
 
 # load environment variables
-# Remember these will be imported as strings, so any other type needs to be casty.
+# Remember these will be imported as strings; change them if required.
 load_dotenv("D:/Development/EnvironmentVariables/.env")
 secret_key = os.getenv("secret_key_blog")
 
@@ -34,8 +34,8 @@ gravatar = Gravatar(app,
                     base_url=None)
 
 # CONNECT TO DB
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "sqlite:///blog.db")
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # configure application
 db = SQLAlchemy(app)
